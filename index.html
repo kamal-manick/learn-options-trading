@@ -36,6 +36,9 @@
             border-radius: 12px;
             margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: space-between;
         }
 
         .app-header h1 {
@@ -51,7 +54,7 @@
 
         .main-grid {
             display: grid;
-            grid-template-columns: 360px 1fr;
+            grid-template-columns: 380px 1fr;
             gap: 30px;
             margin-bottom: 30px;
         }
@@ -70,6 +73,8 @@
             overflow-y: auto;
             position: sticky;
             top: 20px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
         .sidebar h2 {
@@ -393,7 +398,7 @@
         }
 
         .content-section ul {
-            margin-left: 20px;
+            margin-left: 30px !important;
             margin: 15px 0;
         }
 
@@ -478,6 +483,14 @@
             border-left: 3px solid #3498db;
         }
 
+        .mermaid svg {
+            background-color: #f8f9fa;
+            padding: 1.5rem; 
+            border-radius: 8px; 
+            overflow-x: auto; 
+            margin: 1rem 0; 
+        }
+
         .next-lecture {
             background: #d5f4e6;
             padding: 20px;
@@ -530,7 +543,7 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 30px;
+            margin: 30px 5px;
             font-size: 1em;
             transition: background 0.3s;
         }
@@ -599,12 +612,50 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <!-- Initialize Mermaid and render diagrams -->
+    <script>
+    // Wait for the page to fully load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find all Markdown code blocks with class "language-mermaid"
+        const mermaidCodeBlocks = document.querySelectorAll('pre code.language-mermaid');
+    
+        // Convert each code block into a Mermaid diagram
+        mermaidCodeBlocks.forEach(block => {
+        // Create a new div for Mermaid to render into
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid'; // Match the CSS class above
+        mermaidDiv.textContent = block.textContent; // Copy diagram code
+    
+        // Replace the original code block with the Mermaid div
+        block.parentNode.replaceChild(mermaidDiv, block);
+        });
+    
+        // Initialize Mermaid with default settings
+        mermaid.initialize({
+        startOnLoad: true, // Render diagrams when Mermaid loads
+        theme: 'default', // Use default theme (options: default, dark, forest, neutral)
+        logLevel: 3 // Suppress non-critical logs (0 = debug, 3 = error)
+        });
+    });
+    </script>
 </head>
 <body>
     <div class="app-container">
         <div class="app-header">
-            <h1>📈 Options Trading Mastery</h1>
-            <p>Learn options trading from fundamentals to professional-level strategies</p>
+            <div>
+                <h1>📈 Options Trading Mastery</h1>
+                <p>Learn options trading from fundamentals to professional-level strategies</p>
+                <pre>
+            <code class="mermaid">
+graph LR
+A --> B
+A --> C
+C --> D
+            </code>
+        </pre>
+            </div>
+            <button class="btn-back" onclick="showDashboard()">Dashboard</button>
         </div>
 
         <div class="main-grid">
@@ -829,6 +880,29 @@
             header.parentElement.classList.toggle('open');
         }
 
+        function renderMermaid() {
+            // Find all Markdown code blocks with class "language-mermaid"
+            const mermaidCodeBlocks = document.querySelectorAll('pre code.language-mermaid');
+        
+            // Convert each code block into a Mermaid diagram
+            mermaidCodeBlocks.forEach(block => {
+            // Create a new div for Mermaid to render into
+            const mermaidDiv = document.createElement('div');
+            mermaidDiv.className = 'mermaid'; // Match the CSS class above
+            mermaidDiv.textContent = block.textContent; // Copy diagram code
+        
+            // Replace the original code block with the Mermaid div
+            block.parentNode.replaceChild(mermaidDiv, block);
+            });
+
+            // Initialize Mermaid with default settings
+            mermaid.initialize({
+            startOnLoad: true, // Render diagrams when Mermaid loads
+            theme: 'default', // Use default theme (options: default, dark, forest, neutral)
+            logLevel: 3 // Suppress non-critical logs (0 = debug, 3 = error)
+            });
+        }
+
         function showLecture(lectureId) {
             // Find the lecture's module and folder
             let moduleFolder = '';
@@ -873,6 +947,7 @@
                         if (!appState.completedLectures.includes(lectureId)) {
                             appState.completedLectures.push(lectureId);
                         }
+                        renderMermaid();
                         saveProgress();
                         renderModuleList();
                         updateProgress();
