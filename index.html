@@ -199,6 +199,7 @@
             padding: 30px;
             border-radius: 10px;
             margin-top: 20px;
+            border: 1px solid #ecf0f1;
         }
         .progress-bar-label {
             display: flex;
@@ -244,6 +245,12 @@
         .module-progress-table tr:hover {
             background: #f8f9fa;
         }
+        .lecture-content {
+            max-width: 100%;
+        }
+        .lecture-content h2 {
+            margin-top: 30px;
+        }
         .toggle-dark-mode {
             position: fixed;
             bottom: 20px;
@@ -282,13 +289,15 @@
         body.dark-mode .module-header,
         body.dark-mode .lecture-item {
             color: #e0e0e0;
+            background: #16213e;
         }
         body.dark-mode .lecture-item:hover {
             color: #667eea;
             background: #1a1a2e;
         }
         body.dark-mode .progress-bar-container {
-            background: #1a1a2e;
+            background: #16213e;
+            border-color: #1a1a2e;
         }
         body.dark-mode .progress-bar-label {
             color: #e0e0e0;
@@ -312,6 +321,33 @@
             background: #1a1a2e;
             border-color: #16213e;
             color: #e0e0e0;
+        }
+        .btn-back {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        .btn-back:hover {
+            background: #764ba2;
+        }
+        .loading {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 40px;
+        }
+        .error-message {
+            background: #fadbd8;
+            color: #c0392b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #c0392b;
         }
 
         @media (max-width: 768px) {
@@ -365,9 +401,9 @@
                                 <p>Course completion</p>
                             </div>
                             <div class="progress-card">
-                                <h3>Learning Time</h3>
-                                <div class="number" id="timeInvested">0h</div>
-                                <p>minutes invested</p>
+                                <h3>Current Status</h3>
+                                <div class="number" id="currentLecture">1.1</div>
+                                <p>Module.Lecture</p>
                             </div>
                         </div>
 
@@ -399,7 +435,8 @@
 
                 <!-- Lecture View -->
                 <div class="content-view" id="lectureView">
-                    <div id="lectureContent"></div>
+                    <div class="lecture-content" id="lectureContent"></div>
+                    <button class="btn-back" onclick="showDashboard()">← Back to Dashboard</button>
                 </div>
             </main>
         </div>
@@ -408,12 +445,13 @@
     <button class="toggle-dark-mode" id="darkModeBtn">🌙</button>
 
     <script>
-        // Mock course data structure
+        // Course data structure - maps lecture IDs to their file paths
         const courseData = {
             modules: [
                 {
                     id: 1,
                     name: "Foundations of Options",
+                    folder: "module-1-foundations",
                     lectures: [
                         { id: 1, title: "What is an Option? (Calls, Puts & Basics)" },
                         { id: 2, title: "How Options Work (Strike, Expiry, Settlement)" },
@@ -423,6 +461,7 @@
                 {
                     id: 2,
                     name: "Core Concepts",
+                    folder: "module-2-core-concepts",
                     lectures: [
                         { id: 4, title: "Moneyness, Volatility & Time Value" },
                         { id: 5, title: "Time Decay and Theta" },
@@ -432,6 +471,7 @@
                 {
                     id: 3,
                     name: "The Greeks",
+                    folder: "module-3-the-greeks",
                     lectures: [
                         { id: 7, title: "Delta – Directional Sensitivity" },
                         { id: 8, title: "Gamma – Delta's Rate of Change" },
@@ -442,6 +482,7 @@
                 {
                     id: 4,
                     name: "Technical Analysis for Options",
+                    folder: "module-4-technical-analysis",
                     lectures: [
                         { id: 11, title: "Support, Resistance & Trends" },
                         { id: 12, title: "Candlesticks, Patterns & Volume" },
@@ -451,6 +492,7 @@
                 {
                     id: 5,
                     name: "Basic Strategies",
+                    folder: "module-5-basic-strategies",
                     lectures: [
                         { id: 14, title: "Directional Bets – Long Calls & Long Puts" },
                         { id: 15, title: "Spreads Part 1 – Bull Call & Bear Call" },
@@ -461,6 +503,7 @@
                 {
                     id: 6,
                     name: "Risk Management",
+                    folder: "module-6-risk-management",
                     lectures: [
                         { id: 18, title: "Position Sizing & Kelly Criterion" },
                         { id: 19, title: "Stop Losses, Profit Targets & Portfolio Greeks" },
@@ -470,6 +513,7 @@
                 {
                     id: 7,
                     name: "Advanced Strategies",
+                    folder: "module-7-advanced-strategies",
                     lectures: [
                         { id: 21, title: "Iron Condors & Butterflies" },
                         { id: 22, title: "Calendar Spreads & Diagonal Spreads" },
@@ -480,6 +524,7 @@
                 {
                     id: 8,
                     name: "Mastery & Professional Practices",
+                    folder: "module-8-mastery",
                     lectures: [
                         { id: 25, title: "Building Your Edge & Backtesting" },
                         { id: 26, title: "Psychology & Discipline" },
@@ -492,12 +537,32 @@
             ]
         };
 
+        // State management
+        let appState = {
+            currentView: 'dashboard',
+            completedLectures: [1], // Start with Lecture 1 as example
+            currentLecture: 1
+        };
+
         // Initialize
         function init() {
+            loadProgress();
             renderModuleList();
             updateProgress();
             setupDarkMode();
             setupSearch();
+        }
+
+        function loadProgress() {
+            // Try to load progress from localStorage
+            const saved = localStorage.getItem('courseProgress');
+            if (saved) {
+                appState = { ...appState, ...JSON.parse(saved) };
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('courseProgress', JSON.stringify(appState));
         }
 
         function renderModuleList() {
@@ -507,16 +572,19 @@
             courseData.modules.forEach(module => {
                 const moduleItem = document.createElement('li');
                 moduleItem.className = 'module-item';
+                const completedCount = module.lectures.filter(l => appState.completedLectures.includes(l.id)).length;
+                
                 moduleItem.innerHTML = `
                     <div class="module-header" onclick="toggleModule(this)">
                         <span>${module.name}</span>
-                        <div class="progress-dot">0/${module.lectures.length}</div>
+                        <div class="progress-dot">${completedCount}/${module.lectures.length}</div>
                     </div>
                     <ul class="lecture-list">
                         ${module.lectures.map(lecture => `
-                            <li class="lecture-item" onclick="showLecture(${lecture.id})">
+                            <li class="lecture-item ${appState.completedLectures.includes(lecture.id) ? 'completed' : ''} ${appState.currentLecture === lecture.id ? 'current' : ''}" 
+                                onclick="showLecture(${lecture.id})">
                                 <span class="lecture-icon"></span>
-                                ${lecture.title}
+                                <span>${lecture.title}</span>
                             </li>
                         `).join('')}
                     </ul>
@@ -530,28 +598,69 @@
         }
 
         function showLecture(lectureId) {
-            // Hide dashboard, show lecture
-            document.getElementById('dashboardView').classList.remove('active');
-            document.getElementById('lectureView').classList.add('active');
-
-            // Find lecture details
-            let lectureTitle = '';
+            // Find the lecture's module and folder
+            let moduleFolder = '';
             for (let module of courseData.modules) {
                 const lecture = module.lectures.find(l => l.id === lectureId);
                 if (lecture) {
-                    lectureTitle = lecture.title;
+                    moduleFolder = module.folder;
                     break;
                 }
             }
 
-            // For demo, show placeholder
-            document.getElementById('lectureContent').innerHTML = `
-                <h2>${lectureTitle}</h2>
-                <p style="margin-top: 20px; color: #7f8c8d;">Lecture content would load here. In the full implementation, this would load the HTML file for this lecture.</p>
-                <button onclick="showDashboard()" style="margin-top: 20px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
-                    ← Back to Dashboard
-                </button>
-            `;
+            // Construct file path
+            const lectureFile = `content/${moduleFolder}/lecture-${lectureId}.html`;
+
+            // Hide dashboard, show lecture
+            document.getElementById('dashboardView').classList.remove('active');
+            document.getElementById('lectureView').classList.add('active');
+
+            // Show loading state
+            document.getElementById('lectureContent').innerHTML = `<div class="loading">⏳ Loading lecture...</div>`;
+
+            // Fetch the lecture file
+            fetch(lectureFile)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: Lecture file not found`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    // Parse the HTML
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const lectureContainer = doc.querySelector('.lecture-container');
+                    
+                    if (lectureContainer) {
+                        // Insert the lecture content
+                        document.getElementById('lectureContent').innerHTML = lectureContainer.innerHTML;
+                        
+                        // Update current lecture and mark as viewed
+                        appState.currentLecture = lectureId;
+                        if (!appState.completedLectures.includes(lectureId)) {
+                            appState.completedLectures.push(lectureId);
+                        }
+                        saveProgress();
+                        renderModuleList();
+                    } else {
+                        throw new Error('Lecture structure not found in HTML file');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading lecture:', error);
+                    document.getElementById('lectureContent').innerHTML = `
+                        <div class="error-message">
+                            <h3>⚠️ Error Loading Lecture</h3>
+                            <p><strong>Error:</strong> ${error.message}</p>
+                            <p><strong>File attempted:</strong> <code>${lectureFile}</code></p>
+                            <p style="margin-top: 15px; font-size: 0.9em;">
+                                <strong>Solution:</strong> Make sure the lecture file exists in your repository at the correct path.
+                                Only Lecture 1 currently exists. Other lectures will be generated as you progress through the course.
+                            </p>
+                        </div>
+                    `;
+                });
         }
 
         function showDashboard() {
@@ -560,29 +669,49 @@
         }
 
         function updateProgress() {
-            // Demo data - would come from progress.json
-            const completedLectures = 1;
             const totalLectures = 30;
-            const completedModules = 0;
-            const totalModules = 8;
-            const progressPercent = Math.round((completedLectures / totalLectures) * 100);
+            const completedCount = appState.completedLectures.length;
+            const progressPercent = Math.round((completedCount / totalLectures) * 100);
 
-            document.getElementById('lecturesCompleted').textContent = completedLectures;
+            // Get module completion
+            let completedModules = 0;
+            courseData.modules.forEach(module => {
+                const moduleComplete = module.lectures.every(l => appState.completedLectures.includes(l.id));
+                if (moduleComplete) completedModules++;
+            });
+
+            // Find current lecture module
+            let currentModule = 1;
+            courseData.modules.forEach(module => {
+                if (module.lectures.some(l => l.id === appState.currentLecture)) {
+                    currentModule = module.id;
+                }
+            });
+
+            document.getElementById('lecturesCompleted').textContent = completedCount;
             document.getElementById('modulesCompleted').textContent = completedModules;
             document.getElementById('overallPercent').textContent = progressPercent + '%';
             document.getElementById('progressPercent').textContent = progressPercent + '%';
+            document.getElementById('currentLecture').textContent = `${currentModule}.${appState.currentLecture}`;
             document.getElementById('progressFill').style.width = progressPercent + '%';
 
             // Module progress table
             const body = document.getElementById('moduleProgressBody');
-            body.innerHTML = courseData.modules.map((module, idx) => `
-                <tr>
-                    <td>${module.name}</td>
-                    <td>${module.lectures.length}</td>
-                    <td>0</td>
-                    <td><div style="background: #ecf0f1; height: 20px; border-radius: 10px; width: 100px;"></div></td>
-                </tr>
-            `).join('');
+            body.innerHTML = courseData.modules.map((module, idx) => {
+                const lecturesCompleted = module.lectures.filter(l => appState.completedLectures.includes(l.id)).length;
+                const modulePercent = Math.round((lecturesCompleted / module.lectures.length) * 100);
+                return `
+                    <tr>
+                        <td>${module.name}</td>
+                        <td>${module.lectures.length}</td>
+                        <td>${lecturesCompleted}</td>
+                        <td><div style="background: #ecf0f1; height: 20px; border-radius: 10px; width: 100%; position: relative; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: ${modulePercent}%; border-radius: 10px;"></div>
+                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75em; color: #2c3e50; font-weight: bold;">${modulePercent}%</div>
+                        </div></td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function setupDarkMode() {
