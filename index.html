@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options Trading Mastery - Course Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .app-header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .app-header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .app-header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        .main-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            height: fit-content;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 20px;
+        }
+        .sidebar h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .module-list {
+            list-style: none;
+        }
+        .module-item {
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #ecf0f1;
+            transition: all 0.3s;
+        }
+        .module-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        .module-header {
+            background: #f8f9fa;
+            padding: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        .module-header:hover {
+            background: #ecf0f1;
+        }
+        .module-header .progress-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #bdc3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            color: white;
+            font-weight: bold;
+        }
+        .module-header.completed .progress-dot {
+            background: #27ae60;
+        }
+        .lecture-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+            background: white;
+        }
+        .module-item.open .lecture-list {
+            max-height: 500px;
+        }
+        .lecture-item {
+            padding: 10px 15px;
+            border-top: 1px solid #ecf0f1;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #34495e;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .lecture-item:hover {
+            background: #ecf0f1;
+            color: #667eea;
+        }
+        .lecture-item.completed {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .lecture-item.current {
+            background: #dfe6e9;
+            color: #667eea;
+            font-weight: bold;
+        }
+        .lecture-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #bdc3c7;
+        }
+        .lecture-item.completed .lecture-icon {
+            background: #27ae60;
+        }
+        .lecture-item.current .lecture-icon {
+            background: #667eea;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 500px;
+        }
+        .content-view {
+            display: none;
+        }
+        .content-view.active {
+            display: block;
+        }
+        .progress-dashboard {
+            margin-bottom: 40px;
+        }
+        .progress-header {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .progress-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .progress-card h3 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        .progress-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .progress-bar-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .progress-bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #ecf0f1;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .module-progress-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .module-progress-table th,
+        .module-progress-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .module-progress-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .module-progress-table tr:hover {
+            background: #f8f9fa;
+        }
+        .toggle-dark-mode {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        .toggle-dark-mode:hover {
+            transform: scale(1.1);
+        }
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        body.dark-mode .sidebar,
+        body.dark-mode .main-content,
+        body.dark-mode .app-header {
+            background: #0f3460;
+            color: #e0e0e0;
+        }
+        body.dark-mode .app-header h1,
+        body.dark-mode .sidebar h2,
+        body.dark-mode .progress-header {
+            color: #e0e0e0;
+        }
+        body.dark-mode .app-header p {
+            color: #b0b0b0;
+        }
+        body.dark-mode .module-header,
+        body.dark-mode .lecture-item {
+            color: #e0e0e0;
+        }
+        body.dark-mode .lecture-item:hover {
+            color: #667eea;
+            background: #1a1a2e;
+        }
+        body.dark-mode .progress-bar-container {
+            background: #1a1a2e;
+        }
+        body.dark-mode .progress-bar-label {
+            color: #e0e0e0;
+        }
+        body.dark-mode .module-progress-table th {
+            background: #16213e;
+            color: #e0e0e0;
+        }
+        body.dark-mode .module-progress-table tr:hover {
+            background: #16213e;
+        }
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+        body.dark-mode .search-box {
+            background: #1a1a2e;
+            border-color: #16213e;
+            color: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: static;
+                max-height: none;
+            }
+            .app-header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <h1>📈 Options Trading Mastery</h1>
+            <p>Learn options trading from fundamentals to professional-level strategies</p>
+        </div>
+
+        <div class="main-grid">
+            <aside class="sidebar">
+                <input type="text" class="search-box" id="searchBox" placeholder="Search lectures...">
+                <h2>Course Navigation</h2>
+                <ul class="module-list" id="moduleList"></ul>
+            </aside>
+
+            <main class="main-content">
+                <!-- Progress Dashboard View -->
+                <div class="content-view active" id="dashboardView">
+                    <div class="progress-dashboard">
+                        <div class="progress-header">Your Learning Progress</div>
+                        
+                        <div class="progress-grid">
+                            <div class="progress-card">
+                                <h3>Lectures Completed</h3>
+                                <div class="number" id="lecturesCompleted">0</div>
+                                <p>of 30 total</p>
+                            </div>
+                            <div class="progress-card">
+                                <h3>Modules Completed</h3>
+                                <div class="number" id="modulesCompleted">0</div>
+                                <p>of 8 total</p>
+                            </div>
+                            <div class="progress-card">
+                                <h3>Overall Progress</h3>
+                                <div class="number" id="overallPercent">0%</div>
+                                <p>Course completion</p>
+                            </div>
+                            <div class="progress-card">
+                                <h3>Learning Time</h3>
+                                <div class="number" id="timeInvested">0h</div>
+                                <p>minutes invested</p>
+                            </div>
+                        </div>
+
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-label">
+                                <span>Overall Course Progress</span>
+                                <span id="progressPercent">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">Module-wise Progress</h3>
+                        <table class="module-progress-table">
+                            <thead>
+                                <tr>
+                                    <th>Module</th>
+                                    <th>Lectures</th>
+                                    <th>Completed</th>
+                                    <th>Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody id="moduleProgressBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Lecture View -->
+                <div class="content-view" id="lectureView">
+                    <div id="lectureContent"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <button class="toggle-dark-mode" id="darkModeBtn">🌙</button>
+
+    <script>
+        // Mock course data structure
+        const courseData = {
+            modules: [
+                {
+                    id: 1,
+                    name: "Foundations of Options",
+                    lectures: [
+                        { id: 1, title: "What is an Option? (Calls, Puts & Basics)" },
+                        { id: 2, title: "How Options Work (Strike, Expiry, Settlement)" },
+                        { id: 3, title: "Option Payoffs & Risk Diagrams" }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Core Concepts",
+                    lectures: [
+                        { id: 4, title: "Moneyness, Volatility & Time Value" },
+                        { id: 5, title: "Time Decay and Theta" },
+                        { id: 6, title: "Market Microstructure for Options" }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "The Greeks",
+                    lectures: [
+                        { id: 7, title: "Delta – Directional Sensitivity" },
+                        { id: 8, title: "Gamma – Delta's Rate of Change" },
+                        { id: 9, title: "Theta – Time Decay Impact" },
+                        { id: 10, title: "Vega & Rho – Volatility & Interest Rates" }
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "Technical Analysis for Options",
+                    lectures: [
+                        { id: 11, title: "Support, Resistance & Trends" },
+                        { id: 12, title: "Candlesticks, Patterns & Volume" },
+                        { id: 13, title: "TA Applied to Options Trading" }
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "Basic Strategies",
+                    lectures: [
+                        { id: 14, title: "Directional Bets – Long Calls & Long Puts" },
+                        { id: 15, title: "Spreads Part 1 – Bull Call & Bear Call" },
+                        { id: 16, title: "Spreads Part 2 – Straddles & Strangles" },
+                        { id: 17, title: "Writing Strategies – Covered Calls & Cash Puts" }
+                    ]
+                },
+                {
+                    id: 6,
+                    name: "Risk Management",
+                    lectures: [
+                        { id: 18, title: "Position Sizing & Kelly Criterion" },
+                        { id: 19, title: "Stop Losses, Profit Targets & Portfolio Greeks" },
+                        { id: 20, title: "Tail Risk, Gap Risk & Assignment Risk" }
+                    ]
+                },
+                {
+                    id: 7,
+                    name: "Advanced Strategies",
+                    lectures: [
+                        { id: 21, title: "Iron Condors & Butterflies" },
+                        { id: 22, title: "Calendar Spreads & Diagonal Spreads" },
+                        { id: 23, title: "Event-Driven Strategies" },
+                        { id: 24, title: "Volatility Strategies & Mean Reversion" }
+                    ]
+                },
+                {
+                    id: 8,
+                    name: "Mastery & Professional Practices",
+                    lectures: [
+                        { id: 25, title: "Building Your Edge & Backtesting" },
+                        { id: 26, title: "Psychology & Discipline" },
+                        { id: 27, title: "Tax Efficiency & Regulatory Landscape (India-Specific)" },
+                        { id: 28, title: "Reading Greeks in Live Market Conditions" },
+                        { id: 29, title: "Managing Tail Risk & Portfolio Construction" },
+                        { id: 30, title: "Live Trading Checklist & War Stories" }
+                    ]
+                }
+            ]
+        };
+
+        // Initialize
+        function init() {
+            renderModuleList();
+            updateProgress();
+            setupDarkMode();
+            setupSearch();
+        }
+
+        function renderModuleList() {
+            const moduleList = document.getElementById('moduleList');
+            moduleList.innerHTML = '';
+
+            courseData.modules.forEach(module => {
+                const moduleItem = document.createElement('li');
+                moduleItem.className = 'module-item';
+                moduleItem.innerHTML = `
+                    <div class="module-header" onclick="toggleModule(this)">
+                        <span>${module.name}</span>
+                        <div class="progress-dot">0/${module.lectures.length}</div>
+                    </div>
+                    <ul class="lecture-list">
+                        ${module.lectures.map(lecture => `
+                            <li class="lecture-item" onclick="showLecture(${lecture.id})">
+                                <span class="lecture-icon"></span>
+                                ${lecture.title}
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                moduleList.appendChild(moduleItem);
+            });
+        }
+
+        function toggleModule(header) {
+            header.parentElement.classList.toggle('open');
+        }
+
+        function showLecture(lectureId) {
+            // Hide dashboard, show lecture
+            document.getElementById('dashboardView').classList.remove('active');
+            document.getElementById('lectureView').classList.add('active');
+
+            // Find lecture details
+            let lectureTitle = '';
+            for (let module of courseData.modules) {
+                const lecture = module.lectures.find(l => l.id === lectureId);
+                if (lecture) {
+                    lectureTitle = lecture.title;
+                    break;
+                }
+            }
+
+            // For demo, show placeholder
+            document.getElementById('lectureContent').innerHTML = `
+                <h2>${lectureTitle}</h2>
+                <p style="margin-top: 20px; color: #7f8c8d;">Lecture content would load here. In the full implementation, this would load the HTML file for this lecture.</p>
+                <button onclick="showDashboard()" style="margin-top: 20px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    ← Back to Dashboard
+                </button>
+            `;
+        }
+
+        function showDashboard() {
+            document.getElementById('lectureView').classList.remove('active');
+            document.getElementById('dashboardView').classList.add('active');
+        }
+
+        function updateProgress() {
+            // Demo data - would come from progress.json
+            const completedLectures = 1;
+            const totalLectures = 30;
+            const completedModules = 0;
+            const totalModules = 8;
+            const progressPercent = Math.round((completedLectures / totalLectures) * 100);
+
+            document.getElementById('lecturesCompleted').textContent = completedLectures;
+            document.getElementById('modulesCompleted').textContent = completedModules;
+            document.getElementById('overallPercent').textContent = progressPercent + '%';
+            document.getElementById('progressPercent').textContent = progressPercent + '%';
+            document.getElementById('progressFill').style.width = progressPercent + '%';
+
+            // Module progress table
+            const body = document.getElementById('moduleProgressBody');
+            body.innerHTML = courseData.modules.map((module, idx) => `
+                <tr>
+                    <td>${module.name}</td>
+                    <td>${module.lectures.length}</td>
+                    <td>0</td>
+                    <td><div style="background: #ecf0f1; height: 20px; border-radius: 10px; width: 100px;"></div></td>
+                </tr>
+            `).join('');
+        }
+
+        function setupDarkMode() {
+            const btn = document.getElementById('darkModeBtn');
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                btn.textContent = '☀️';
+            }
+
+            btn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+                btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            });
+        }
+
+        function setupSearch() {
+            const searchBox = document.getElementById('searchBox');
+            searchBox.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const lectureItems = document.querySelectorAll('.lecture-item');
+                
+                lectureItems.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(query) ? 'flex' : 'none';
+                });
+            });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

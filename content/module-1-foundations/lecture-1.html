@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 1: What is an Option?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        .lecture-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .lecture-header {
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .lecture-header h1 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .learning-objectives {
+            background: #ecf0f1;
+            padding: 20px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .learning-objectives h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .learning-objectives ul {
+            margin-left: 20px;
+        }
+        .learning-objectives li {
+            margin: 8px 0;
+            color: #2c3e50;
+        }
+        .content-section {
+            margin: 30px 0;
+        }
+        .content-section h2 {
+            color: #2c3e50;
+            font-size: 1.6em;
+            margin: 30px 0 15px 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .content-section h3 {
+            color: #34495e;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+        .content-section p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+        .example-box {
+            background: #e8f4f8;
+            border-left: 4px solid #16a085;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .example-box strong {
+            color: #16a085;
+        }
+        .key-term {
+            background: #fff9e6;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+            border-radius: 4px;
+        }
+        .key-term strong {
+            color: #e67e22;
+        }
+        .quiz-section {
+            background: #fef5e7;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 2px solid #f39c12;
+        }
+        .quiz-section h3 {
+            color: #d68910;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        details {
+            margin: 15px 0;
+            padding: 0;
+        }
+        details summary {
+            cursor: pointer;
+            padding: 12px 15px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #2c3e50;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        details summary:hover {
+            background: #d5dbdb;
+        }
+        details[open] summary {
+            background: #3498db;
+            color: white;
+            margin-bottom: 10px;
+        }
+        details > p {
+            margin: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #3498db;
+        }
+        .next-lecture {
+            background: #d5f4e6;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+        .next-lecture strong {
+            color: #27ae60;
+            font-size: 1.1em;
+        }
+        .lecture-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        .btn-disabled {
+            background: #bdc3c7;
+            color: white;
+            cursor: not-allowed;
+        }
+        .btn-next {
+            background: #3498db;
+            color: white;
+        }
+        .btn-next:hover {
+            background: #2980b9;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ecf0f1;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #34495e;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>Lecture 1: What is an Option? (Calls, Puts & Basics)</h1>
+            <p style="color: #7f8c8d; font-size: 0.95em;">Module 1: Foundations of Options | Duration: ~35 minutes</p>
+        </div>
+
+        <div class="learning-objectives">
+            <h3>📚 Learning Objectives</h3>
+            <ul>
+                <li>Understand what an option contract is and how it differs from owning stock</li>
+                <li>Distinguish between calls and puts and their fundamental rights</li>
+                <li>Grasp the concepts of intrinsic value and time value</li>
+                <li>Understand why options exist and their practical uses</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>What Exactly is an Option?</h2>
+            <p>
+                An <strong>option</strong> is a financial contract that gives the buyer the <strong>right, but not the obligation</strong>, to buy or sell an underlying asset at a predetermined price on or before a specific date. The key word here is "right"—you're not required to exercise this right.
+            </p>
+            <p>
+                Think of it like an insurance policy or a reservation. When you buy a call option on Nifty 50, you're essentially getting the right to buy Nifty at a fixed price (called the strike price) by a certain date (called the expiration date). If Nifty rises above that price, the option becomes valuable. If it doesn't, the option expires worthless, and your maximum loss is the premium you paid for the option.
+            </p>
+            
+            <div class="key-term">
+                <strong>Option Definition:</strong> A contract giving the buyer the right to buy (call) or sell (put) an underlying asset at a fixed price (strike) by a certain date (expiry), in exchange for paying a premium.
+            </div>
+
+            <h3>Why Do Options Exist?</h3>
+            <p>Options serve three primary purposes:</p>
+            <ul style="margin-left: 20px; margin: 15px 0;">
+                <li><strong>Hedging:</strong> Protection against adverse price moves. If you own Nifty stocks, you can buy put options to protect yourself if the market crashes.</li>
+                <li><strong>Leverage:</strong> Control a large position with a small capital outlay. Pay ₹5,000 premium to control ₹5,00,000 worth of Nifty stock.</li>
+                <li><strong>Income:</strong> Generate recurring income by selling options (like collecting rent on an asset).</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>Real Example:</strong> You own 100 shares of TCS at ₹3,500. The market is uncertain. Instead of selling your shares, you buy 1 put option at strike ₹3,400 by paying ₹80 premium per share (₹8,000 total). Now, if TCS crashes to ₹3,000, your put option is worth money—you can exercise it and sell at ₹3,400, limiting your loss. If TCS rises to ₹4,000, your upside is unlimited; you simply don't exercise the put. This is hedging.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Calls vs Puts: The Two Types</h2>
+
+            <h3>Call Options</h3>
+            <p>
+                A <strong>call option</strong> gives the buyer the right to <strong>buy</strong> the underlying asset at the strike price.
+            </p>
+            <ul style="margin-left: 20px; margin: 15px 0;">
+                <li><strong>Call buyer thinks:</strong> "The price will go up. I want the right to buy at a fixed price."</li>
+                <li><strong>Call seller thinks:</strong> "The price will stay flat or drop. I'll collect premium for agreeing to sell."</li>
+                <li><strong>Max profit (buyer):</strong> Unlimited (if price goes to infinity)</li>
+                <li><strong>Max loss (buyer):</strong> Premium paid (fixed amount)</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>Call Example:</strong> Nifty 50 is at 21,000. You buy a call option with strike 21,200 expiring in 1 month, paying ₹150 premium. 
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>If Nifty rises to 21,500 on expiry: Your call is worth ₹300 (21,500 - 21,200). You profit ₹300 - ₹150 = ₹150 per lot (₹7,500 for 1 lot since each index point = ₹50).</li>
+                    <li>If Nifty stays at 21,000: Your call expires worthless. You lose ₹150 premium (₹7,500).</li>
+                    <li>If Nifty drops to 20,500: Your call expires worthless. You still lose ₹150 premium.</li>
+                </ul>
+            </div>
+
+            <h3>Put Options</h3>
+            <p>
+                A <strong>put option</strong> gives the buyer the right to <strong>sell</strong> the underlying asset at the strike price.
+            </p>
+            <ul style="margin-left: 20px; margin: 15px 0;">
+                <li><strong>Put buyer thinks:</strong> "The price will go down. I want the right to sell at a fixed price."</li>
+                <li><strong>Put seller thinks:</strong> "The price will stay flat or rise. I'll collect premium for agreeing to buy."</li>
+                <li><strong>Max profit (buyer):</strong> Strike price - premium paid (limited)</li>
+                <li><strong>Max loss (buyer):</strong> Premium paid (fixed amount)</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>Put Example:</strong> Nifty 50 is at 21,000. You buy a put option with strike 20,800 expiring in 1 month, paying ₹150 premium.
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>If Nifty crashes to 20,000 on expiry: Your put is worth ₹800 (20,800 - 20,000). You profit ₹800 - ₹150 = ₹650 per lot (₹32,500).</li>
+                    <li>If Nifty stays at 21,000: Your put expires worthless. You lose ₹150 premium (₹7,500).</li>
+                    <li>If Nifty rises to 21,500: Your put expires worthless. You still lose ₹150 premium.</li>
+                </ul>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Call Option</th>
+                        <th>Put Option</th>
+                    </tr>
+                    <tr>
+                        <td>Right to</td>
+                        <td>BUY at strike price</td>
+                        <td>SELL at strike price</td>
+                    </tr>
+                    <tr>
+                        <td>Buyer's view</td>
+                        <td>Bullish (price will ↑)</td>
+                        <td>Bearish (price will ↓)</td>
+                    </tr>
+                    <tr>
+                        <td>Seller's view</td>
+                        <td>Bearish or Neutral</td>
+                        <td>Bullish or Neutral</td>
+                    </tr>
+                    <tr>
+                        <td>Max profit (buyer)</td>
+                        <td>Unlimited</td>
+                        <td>Strike - Premium</td>
+                    </tr>
+                    <tr>
+                        <td>Max loss (buyer)</td>
+                        <td>Premium paid</td>
+                        <td>Premium paid</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Intrinsic Value & Time Value</h2>
+            <p>
+                An option's price is composed of two components: <strong>intrinsic value</strong> and <strong>time value</strong>.
+            </p>
+
+            <h3>Intrinsic Value</h3>
+            <p>
+                The <strong>intrinsic value</strong> is the immediate profit you'd make if you exercised the option today. It's the "real" value built into the option.
+            </p>
+            <ul style="margin-left: 20px; margin: 15px 0;">
+                <li><strong>For calls:</strong> Max(Spot - Strike, 0)</li>
+                <li><strong>For puts:</strong> Max(Strike - Spot, 0)</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>Intrinsic Value Example:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Nifty at 21,500. Call strike 21,000: Intrinsic = 21,500 - 21,000 = ₹500. (Option is "in the money")</li>
+                    <li>Nifty at 21,500. Call strike 22,000: Intrinsic = 0. (Option is "out of the money", has no intrinsic value)</li>
+                    <li>Nifty at 21,500. Put strike 22,000: Intrinsic = 22,000 - 21,500 = ₹500. (Option is "in the money")</li>
+                </ul>
+            </div>
+
+            <h3>Time Value</h3>
+            <p>
+                The <strong>time value</strong> (or "extrinsic value") is the additional amount traders are willing to pay for the <em>potential</em> that the option will become more profitable before expiration.
+            </p>
+            <p>
+                <strong>Formula:</strong> Option Price = Intrinsic Value + Time Value
+            </p>
+
+            <div class="example-box">
+                <strong>Time Value Example:</strong> Nifty at 21,000. Call strike 21,200 expiring in 30 days:
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Intrinsic value = 0 (out of money)</li>
+                    <li>Market price = ₹150</li>
+                    <li>Time value = ₹150 (all of it is time value; no intrinsic)</li>
+                    <li><strong>Why ₹150?</strong> Traders believe there's a 30% chance Nifty rises above 21,200 in 30 days. That possibility has value.</li>
+                </ul>
+            </div>
+
+            <h3>How Time Decay Works</h3>
+            <p>
+                As expiration approaches, time value decreases. On the expiration day, time value becomes zero—only intrinsic value remains. This decay accelerates as you get closer to expiry (you'll learn this formally as "theta" in Module 3).
+            </p>
+
+            <div class="key-term">
+                <strong>Key insight:</strong> If you buy an option and the underlying price doesn't move, you still lose money every day because time value erodes. This is why timing and patience matter in options trading.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Moneyness: In, At, and Out</h2>
+            <p>
+                Traders use three terms to describe where an option's strike price is relative to the current spot price:
+            </p>
+            <ul style="margin-left: 20px; margin: 15px 0;">
+                <li><strong>In the Money (ITM):</strong> Option has intrinsic value. Has a good chance of profit. Example: Call with strike 20,500 when Nifty is at 21,000.</li>
+                <li><strong>At the Money (ATM):</strong> Strike equals spot price (roughly). Maximum uncertainty. Example: Call with strike 21,000 when Nifty is at 21,000.</li>
+                <li><strong>Out of the Money (OTM):</strong> Option has no intrinsic value. Cheaper to buy, higher risk. Example: Call with strike 21,500 when Nifty is at 21,000.</li>
+            </ul>
+        </div>
+
+        <div class="quiz-section">
+            <h3>✅ Check Your Knowledge</h3>
+            <p style="margin-bottom: 20px;">Click on each question to reveal the answer.</p>
+
+            <details>
+                <summary>Q1: What is the main difference between a call and a put?</summary>
+                <p>
+                    <strong>A:</strong> A call gives you the right to BUY at the strike price; a put gives you the right to SELL at the strike price. Call buyers are bullish; put buyers are bearish.
+                </p>
+            </details>
+
+            <details>
+                <summary>Q2: If you buy a call option and the price never rises, what happens to your option?</summary>
+                <p>
+                    <strong>A:</strong> The option expires worthless. You lose the entire premium you paid. Options lose value over time if the underlying doesn't move in your favor (due to time decay / theta).
+                </p>
+            </details>
+
+            <details>
+                <summary>Q3: What are intrinsic value and time value? Give an example.</summary>
+                <p>
+                    <strong>A:</strong> Intrinsic value is the immediate profit if exercised today (Max(Spot - Strike, 0) for calls). Time value is the additional premium traders pay for the possibility of profit before expiry. Example: Call strike 21,000, Nifty at 21,200, paying ₹250 total premium = ₹200 intrinsic + ₹50 time value.
+                </p>
+            </details>
+
+            <details>
+                <summary>Q4: Why would someone buy a put option instead of just selling the stock?</summary>
+                <p>
+                    <strong>A:</strong> A put is insurance. You keep ownership and upside potential (if price rises), but you're protected (if price falls). Selling stock means you lose all upside. Puts also require less capital and margin than shorting stock.
+                </p>
+            </details>
+
+            <details>
+                <summary>Q5: What is "time decay" and why should you care?</summary>
+                <p>
+                    <strong>A:</strong> Time decay (theta) means options lose value as expiration approaches, even if the price doesn't move. This decay accelerates near expiry. For long option buyers, it's a headwind (losing money daily). For short option sellers, it's a tailwind (making money daily). You'll learn this formally in Lecture 9.
+                </p>
+            </details>
+        </div>
+
+        <div class="next-lecture">
+            <strong>📌 Next Lecture Preview:</strong> In Lecture 2, we'll dive into the mechanics of how options actually work. You'll learn about strike prices, expiration dates, settlement methods, and how the NSE options ecosystem is structured. You'll understand why some options expire weekly and others monthly, and how Indian options differ from other markets.
+        </div>
+
+        <div class="lecture-nav">
+            <button class="btn btn-disabled" disabled>← Previous</button>
+            <button class="btn btn-next" onclick="alert('In the full course app, this would navigate to Lecture 2')">Next Lecture →</button>
+        </div>
+    </div>
+</body>
+</html>

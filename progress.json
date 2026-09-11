@@ -1,0 +1,264 @@
+{
+  "course_metadata": {
+    "name": "Options Trading Mastery",
+    "total_modules": 8,
+    "total_lectures": 30,
+    "start_date": null,
+    "estimated_completion_date": null
+  },
+  "current_progress": {
+    "current_module": 1,
+    "current_lecture": 1,
+    "overall_progress_percent": 0,
+    "time_invested_minutes": 0,
+    "last_session_date": null
+  },
+  "completed_lectures": [],
+  "module_progress": [
+    {
+      "module": 1,
+      "name": "Foundations of Options",
+      "lectures": 3,
+      "completed": 0,
+      "lectures_detail": [
+        {
+          "lecture": 1,
+          "title": "What is an Option? (Calls, Puts & Basics)",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 2,
+          "title": "How Options Work (Strike, Expiry, Settlement)",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 3,
+          "title": "Option Payoffs & Risk Diagrams",
+          "status": "not_started",
+          "completed_at": null
+        }
+      ]
+    },
+    {
+      "module": 2,
+      "name": "Core Concepts",
+      "lectures": 3,
+      "completed": 0,
+      "lectures_detail": [
+        {
+          "lecture": 4,
+          "title": "Moneyness, Volatility & Time Value",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 5,
+          "title": "Time Decay and Theta",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 6,
+          "title": "Market Microstructure for Options",
+          "status": "not_started",
+          "completed_at": null
+        }
+      ]
+    },
+    {
+      "module": 3,
+      "name": "The Greeks",
+      "lectures": 4,
+      "completed": 0,
+      "lectures_detail": [
+        {
+          "lecture": 7,
+          "title": "Delta – Directional Sensitivity",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 8,
+          "title": "Gamma – Delta's Rate of Change",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 9,
+          "title": "Theta – Time Decay Impact",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 10,
+          "title": "Vega & Rho – Volatility & Interest Rates",
+          "status": "not_started",
+          "completed_at": null
+        }
+      ]
+    },
+    {
+      "module": 4,
+      "name": "Technical Analysis for Options",
+      "lectures": 3,
+      "completed": 0,
+      "lectures_detail": [
+        {
+          "lecture": 11,
+          "title": "Support, Resistance & Trends",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 12,
+          "title": "Candlesticks, Patterns & Volume",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 13,
+          "title": "TA Applied to Options Trading",
+          "status": "not_started",
+          "completed_at": null
+        }
+      ]
+    },
+    {
+      "module": 5,
+      "name": "Basic Strategies",
+      "lectures": 4,
+      "completed": 0,
+      "lectures_detail": [
+        {
+          "lecture": 14,
+          "title": "Directional Bets – Long Calls & Long Puts",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 15,
+          "title": "Spreads Part 1 – Bull Call & Bear Call",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 16,
+          "title": "Spreads Part 2 – Straddles & Strangles",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 17,
+          "title": "Writing Strategies – Covered Calls & Cash Puts",
+          "status": "not_started",
+          "completed_at": null
+        }
+      ]
+    },
+    {
+      "module": 6,
+      "name": "Risk Management",
+      "lectures": 3,
+      "completed": 0,
+      "lectures_detail": [
+        {
+          "lecture": 18,
+          "title": "Position Sizing & Kelly Criterion",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 19,
+          "title": "Stop Losses, Profit Targets & Portfolio Greeks",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 20,
+          "title": "Tail Risk, Gap Risk & Assignment Risk",
+          "status": "not_started",
+          "completed_at": null
+        }
+      ]
+    },
+    {
+      "module": 7,
+      "name": "Advanced Strategies",
+      "lectures": 4,
+      "completed": 0,
+      "lectures_detail": [
+        {
+          "lecture": 21,
+          "title": "Iron Condors & Butterflies",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 22,
+          "title": "Calendar Spreads & Diagonal Spreads",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 23,
+          "title": "Event-Driven Strategies",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 24,
+          "title": "Volatility Strategies & Mean Reversion",
+          "status": "not_started",
+          "completed_at": null
+        }
+      ]
+    },
+    {
+      "module": 8,
+      "name": "Mastery & Professional Practices",
+      "lectures": 6,
+      "completed": 0,
+      "lectures_detail": [
+        {
+          "lecture": 25,
+          "title": "Building Your Edge & Backtesting",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 26,
+          "title": "Psychology & Discipline",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 27,
+          "title": "Tax Efficiency & Regulatory Landscape (India-Specific)",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 28,
+          "title": "Reading Greeks in Live Market Conditions",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 29,
+          "title": "Managing Tail Risk & Portfolio Construction",
+          "status": "not_started",
+          "completed_at": null
+        },
+        {
+          "lecture": 30,
+          "title": "Live Trading Checklist & War Stories",
+          "status": "not_started",
+          "completed_at": null
+        }
+      ]
+    }
+  ],
+  "notes": "Course initialized. Begin with Lecture 1 in Module 1."
+}
