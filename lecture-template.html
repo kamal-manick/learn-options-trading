@@ -38,6 +38,42 @@
             <div class="example-box">
                 <strong>Example:</strong> Real-world example with concrete numbers.
             </div>
+
+            <!-- MERMAID DIAGRAM EXAMPLE -->
+            <h3>Mermaid Flow Diagram</h3>
+            <p>Use mermaid diagrams to explain processes and relationships:</p>
+            <pre><code class="mermaid">
+graph LR
+    A["Start: Concept"] --> B["Step 1"]
+    B --> C["Step 2"]
+    C --> D["Decision"]
+    D -->|Yes| E["Outcome 1"]
+    D -->|No| F["Outcome 2"]
+            </code></pre>
+
+            <!-- DIRECT SVG DIAGRAM EXAMPLE -->
+            <h3>SVG Diagram Example</h3>
+            <p>Use SVG for detailed visual explanations like candlestick patterns:</p>
+            <svg class="svg-diagram" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background -->
+                <rect width="400" height="300" fill="#f8f9fa" />
+                
+                <!-- Grid lines -->
+                <line x1="50" y1="20" x2="50" y2="280" stroke="#ddd" stroke-width="1" />
+                <line x1="50" y1="280" x2="350" y2="280" stroke="#ddd" stroke-width="1" />
+                
+                <!-- Candlestick -->
+                <g id="candlestick">
+                    <!-- High-Low wick -->
+                    <line x1="150" y1="50" x2="150" y2="200" stroke="#333" stroke-width="1" />
+                    <!-- Open-Close body -->
+                    <rect x="130" y="100" width="40" height="80" fill="#27ae60" stroke="#333" stroke-width="1" />
+                </g>
+                
+                <!-- Labels -->
+                <text x="150" y="220" text-anchor="middle" font-size="12" fill="#333">High-Low Range</text>
+                <text x="150" y="240" text-anchor="middle" font-size="12" fill="#333">Open-Close Body</text>
+            </svg>
         </div>
 
         <div class="content-section">

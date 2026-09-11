@@ -193,6 +193,60 @@ When generating a lecture using `lecture-template.html`:
 10. **Scaffold learning**: Build on prior lectures; reference earlier concepts
 11. **Anticipate confusion**: Address common misconceptions in the Q&A section
 
+### Diagrams in Lectures (Mermaid & SVG)
+
+When creating lectures, **add visual diagrams to explain complex concepts**. Use one of two formats:
+
+#### Mermaid Diagrams
+Use **Mermaid** for flowcharts, process flows, and concept relationships. Wrap in `<pre><code class="mermaid">` tags.
+
+**Best for:**
+- Decision trees (e.g., choosing between call/put strategies)
+- Process flows (e.g., option lifecycle, Greeks relationships)
+- Relationships and dependencies (e.g., factor interactions in volatility)
+
+**Example:**
+```html
+<pre><code class="mermaid">
+graph LR
+    A["Market Direction"] --> B{Bullish?}
+    B -->|Yes| C["Buy Call or<br/>Bull Spread"]
+    B -->|No| D["Buy Put or<br/>Bear Spread"]
+    C --> E["Monitor Greeks"]
+    D --> E
+</code></pre>
+```
+
+#### SVG Diagrams
+Use **SVG** (inline `<svg>` tags) for detailed technical illustrations. Add the class `svg-diagram` for automatic styling.
+
+**Best for:**
+- Candlestick patterns (real/doji/harami, etc.)
+- Payoff diagrams (profit/loss curves)
+- Greeks visualizations (delta, gamma curves)
+- Support/resistance levels
+- Order flow mechanics
+
+**Example (candlestick):**
+```html
+<svg class="svg-diagram" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <!-- SVG content here -->
+</svg>
+```
+
+**SVG Guidelines:**
+- Use viewBox for responsiveness (e.g., `viewBox="0 0 400 300"`)
+- Keep SVGs simple and readable
+- Use clear colors: bullish (#27ae60, green), bearish (#e74c3c, red), neutral (#95a5a6, gray)
+- Include axis labels and legends for clarity
+- Test readability at different zoom levels
+
+**When to use diagrams:**
+- **Early modules (1-2)**: Simple mermaid flowcharts for concepts
+- **Technical modules (3-4)**: Mermaid for Greeks relationships; SVG for patterns
+- **Strategy modules (5-7)**: Mermaid for decision trees; SVG for payoff diagrams
+- **Advanced modules (8+)**: Detailed SVG for complex scenarios
+
 ## Initialization on First Run
 
 On the first session, the skill auto-generates:
