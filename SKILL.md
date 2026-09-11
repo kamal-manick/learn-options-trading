@@ -19,11 +19,14 @@ This skill enables interactive, self-paced tutoring in options trading. It manag
 
 ## Workflow at Each Session
 
-1. **Clone and assess**: Read the GitHub repo to determine current progress
-2. **Load context**: Identify the next uncompleted lecture
-3. **Deliver lecture**: Generate lecture content (HTML) with 2-5 Q&A check-your-knowledge items
-4. **Update tracker**: Modify progress file with newly completed lecture
-5. **Present outputs**: Show lecture file and updated progress tracker for manual GitHub upload (or automated push if credentials available)
+1. **Clone and assess**: Read the GitHub repo to determine current progress (using outline.md and progress.json)
+2. **Load context**: Identify the next uncompleted lecture from the course outline
+3. **Deliver lecture**: Generate lecture HTML based on `lecture-template.html` structure
+   - Fill all required sections: header, objectives, content, quiz, preview, navigation
+   - NO inline styles; use semantic HTML only
+   - Follow the template structure from the cloned repo
+4. **Update tracker**: Modify progress.json with newly completed lecture metadata
+5. **Present outputs**: Display the lecture file and updated progress tracker for manual GitHub upload (or automated push if credentials available)
 
 ## How to Use This Skill
 
@@ -64,18 +67,38 @@ learn-options-trading/
 
 ## Lecture Format (HTML)
 
-Each lecture includes:
-- **Title & learning objectives** (2-3 key goals)
-- **Main content** (text, embedded diagrams, video embeds if applicable)
-- **Interactive Q&A section** with collapsible answers:
-  ```html
-  <details>
-    <summary>Q: What is an option?</summary>
-    <p>A: An option is a contract giving the buyer...</p>
-  </details>
-  ```
-- **Knowledge check** (2-5 questions, answers hidden until clicked)
-- **Preview of next lecture** (1-2 sentences)
+Each lecture is generated using the `lecture-template.html` structure with NO inline styles. The template includes:
+
+**Required sections:**
+1. **Lecture header** — title and metadata (Module & duration)
+2. **Learning objectives** — 2-3 key learning goals
+3. **Content sections** — main lecture material organized in H2/H3 headings
+   - Content paragraphs with concrete examples
+   - Key term definitions (wrapped in `<div class="key-term">`)
+   - Example boxes (wrapped in `<div class="example-box">`)
+   - Tables with class `table-responsive` where applicable
+4. **Quiz section** — 5 collapsible Q&A pairs using `<details>` tags
+5. **Next lecture preview** — 1-2 sentence teaser
+6. **Navigation buttons** — Previous/Next buttons (disabled/enabled as appropriate)
+
+**Structure template:**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Title - Options Trading</title>
+</head>
+<body>
+    <div class="lecture-container">
+        <!-- Header, objectives, content, quiz, preview, navigation -->
+    </div>
+</body>
+</html>
+```
+
+**Important:** NO CSS, NO inline style attributes. All styling is handled externally via the index.html viewer.
 
 ## Web App Features
 
@@ -156,16 +179,19 @@ The skill generates a comprehensive outline covering:
 
 ## Tutor Instructions
 
-When generating a lecture:
+When generating a lecture using `lecture-template.html`:
 
-1. **Assess skill level**: Start simple in early modules, increase complexity in later ones
-2. **Use examples**: Every concept needs a concrete example (with realistic numbers)
-3. **Visual thinking**: Describe diagrams (payoff charts, Greeks curves) even in text; user can sketch or AI generates SVG
-4. **Video references**: If a topic is better explained via video (e.g., Greeks behavior), embed YouTube links
-5. **Real India context**: Use NSE index options, Nifty, Bank Nifty examples; mention SEBI rules where relevant
-6. **Interactive Q&A**: Make questions test understanding, not just recall
-7. **Scaffold learning**: Build on prior lectures; reference earlier concepts
-8. **Anticipate confusion**: Address common misconceptions explicitly
+1. **Follow template structure exactly**: Use the sections from lecture-template.html as the blueprint
+2. **No styling**: Omit all CSS and inline `style` attributes; content-only HTML
+3. **Assess skill level**: Start simple in early modules, increase complexity in later ones
+4. **Use concrete examples**: Every concept needs a realistic example with NSE/Nifty numbers
+5. **Key terms & example boxes**: Use `<div class="key-term">` and `<div class="example-box">` divs (no styles inside)
+6. **Tables for data**: Use `<div class="table-responsive"><table>` for comparative data (no inline styles)
+7. **Interactive quiz**: Generate 5 collapsible `<details>` Q&A pairs testing conceptual understanding
+8. **Video references**: Embed YouTube links in content when appropriate (e.g., Greeks behavior)
+9. **Real India context**: Reference NSE, Nifty, Bank Nifty; mention SEBI rules where relevant
+10. **Scaffold learning**: Build on prior lectures; reference earlier concepts
+11. **Anticipate confusion**: Address common misconceptions in the Q&A section
 
 ## Initialization on First Run
 
@@ -185,6 +211,96 @@ Since the skill may not have push credentials:
 3. User downloads and manually git add/commit/push to their repo
 4. Alternatively: User provides a GitHub personal access token (PAT) for automated pushes
 
+## Lecture Generation Template
+
+When generating each lecture, use this exact structure from `lecture-template.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[Lecture Title] - Options Trading</title>
+</head>
+<body>
+    <div class="lecture-container">
+        <!-- Header: title + module + duration -->
+        <div class="lecture-header">
+            <h1>[Lecture Title]</h1>
+            <p>Module [X]: [Module Name] | Duration: ~35 minutes</p>
+        </div>
+
+        <!-- Learning Objectives: 2-3 key outcomes -->
+        <div class="learning-objectives">
+            <h3>📚 Learning Objectives</h3>
+            <ul>
+                <li>[Objective 1]</li>
+                <li>[Objective 2]</li>
+                <li>[Objective 3]</li>
+            </ul>
+        </div>
+
+        <!-- Main Content: organized sections with H2/H3, paragraphs, key terms, examples -->
+        <div class="content-section">
+            <h2>[Section Heading]</h2>
+            <p>[Paragraph content]</p>
+            <h3>[Subsection]</h3>
+            <p>[Detailed content]</p>
+            <div class="key-term">
+                <strong>Key Term:</strong> [Definition]
+            </div>
+            <div class="example-box">
+                <strong>Example:</strong> [Real-world Nifty/NSE example with numbers]
+            </div>
+        </div>
+
+        <!-- Tables (if needed) -->
+        <div class="table-responsive">
+            <table>
+                <tr><th>[Column 1]</th><th>[Column 2]</th></tr>
+                <tr><td>[Data]</td><td>[Data]</td></tr>
+            </table>
+        </div>
+
+        <!-- Quiz: 5 collapsible Q&A pairs -->
+        <div class="quiz-section">
+            <h3>✅ Check Your Knowledge</h3>
+            <p>Click on each question to reveal the answer.</p>
+            <details>
+                <summary>Q1: [Question text]?</summary>
+                <p>A: [Answer text]</p>
+            </details>
+            <!-- Q2-Q5 following same pattern -->
+        </div>
+
+        <!-- Next lecture teaser -->
+        <div class="next-lecture">
+            <strong>📌 Next Lecture Preview:</strong> [1-2 sentence preview]
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="lecture-nav">
+            <button class="btn btn-disabled" disabled>← Previous</button>
+            <button class="btn btn-next">Next Lecture →</button>
+        </div>
+    </div>
+</body>
+</html>
+```
+
+**Key rules for this template:**
+- NO `style=""` attributes
+- NO `<style>` tags
+- Use only semantic HTML + class names for styling (handled by external CSS)
+- All content goes inside `<div class="lecture-container">`
+- Tables always wrap in `<div class="table-responsive">`
+- Key concepts go in `<div class="key-term">`
+- Real examples go in `<div class="example-box">`
+- Quiz questions use `<details>` tags (no hiding via JavaScript)
+- Duration: always ~35 minutes estimate
+- Include NSE/Nifty examples where relevant
+
 ## Notes
 
 - Each lecture session takes ~30-45 minutes of learning time
@@ -192,3 +308,4 @@ Since the skill may not have push credentials:
 - Course is self-paced; can stretch over weeks or months
 - After Module 6 (Risk Management), student should begin paper trading to reinforce concepts
 - Module 8 assumes student has paper-traded for 4+ weeks
+- **Template-based generation ensures consistency**: All lectures follow the same structural pattern from `lecture-template.html`
